@@ -35,8 +35,9 @@ defmodule Gax.ApiTest do
     mock(fn %{
               method: :get,
               url: "https://example.com/v1/stores/store-1/pets",
-              headers: [{"x-goog-api-client", ^api_client}]
+              headers: headers
             } ->
+      assert {"x-goog-api-client", api_client} in headers
       %Tesla.Env{status: 200, body: @pets_json}
     end)
 
@@ -61,10 +62,15 @@ defmodule Gax.ApiTest do
     mock(fn %{
               method: :get,
               url: "https://example.com/v1/stores/store-1/pets",
-              headers: [{"x-goog-api-client", ^api_client}]
+              headers: headers
             } ->
-      %Tesla.Env{status: 200, body: @pets_json_compressed,
-                 headers: [{"content-encoding", "gzip"}]}
+      assert {"x-goog-api-client", api_client} in headers
+
+      %Tesla.Env{
+        status: 200,
+        body: @pets_json_compressed,
+        headers: [{"content-encoding", "gzip"}]
+      }
     end)
 
     conn = TestClient.Connection.new()

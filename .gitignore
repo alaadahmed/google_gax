@@ -22,3 +22,6 @@ erl_crash.dump
 # Ignore package tarball (built via "mix hex.build").
 gax-*.tar
 
+
+# Dependency resolution is done by consumers; this package does not track its lock.
+/mix.lock
